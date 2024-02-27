@@ -19,8 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
+        'username',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -42,4 +45,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function partidas() {
+        return $this->hasMany(Partida::class);
+    }
 }
