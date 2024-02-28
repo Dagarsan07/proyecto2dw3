@@ -5,11 +5,18 @@ import { useAuthStore } from "../stores/auth";
 const authStore = useAuthStore();
 
 const logged = authStore.isLogged;
+const username = authStore.username;
+
+const showDropdown = ref(false);
+
+function toggleDropdown() {
+    showDropdown.value = !showDropdown.value;
+}
 </script>
 
 <template>
     <div
-        class="bg-gray-400 flex justify-between px-4 md:px-8 py-6 items-center"
+        class="bg-gray-400 flex justify-between px-4 md:px-8 py-6 items-center sticky top-0 z-30"
     >
         <h1>Logo</h1>
 
@@ -20,31 +27,25 @@ const logged = authStore.isLogged;
         >
             <input class="peer hidden" type="checkbox" id="mobile-menu" />
             <div
-                class="relative z-50 block h-[2px] w-7 bg-black bg-transparent content-[''] before:absolute before:top-[-0.35rem] before:z-50 before:block before:h-full before:w-full before:bg-black before:transition-all before:duration-200 before:ease-out before:content-[''] after:absolute after:right-0 after:bottom-[-0.35rem] after:block after:h-full after:w-full after:bg-black after:transition-all after:duration-200 after:ease-out after:content-[''] peer-checked:bg-transparent before:peer-checked:top-0 before:peer-checked:w-full before:peer-checked:rotate-45 before:peer-checked:transform after:peer-checked:bottom-0 after:peer-checked:w-full after:peer-checked:-rotate-45 after:peer-checked:transform"
+                class="relative z-50 block h-[2px] w-7 bg-black bg-transparent content-[''] before:absolute before:top-[-0.35rem] before:z-50 before:block before:h-full before:w-full before:bg-black before:transition-all before:duration-300 before:ease-out before:content-[''] after:absolute after:right-0 after:bottom-[-0.35rem] after:block after:h-full after:w-full after:bg-black after:transition-all after:duration-300 after:ease-out after:content-[''] peer-checked:bg-transparent before:peer-checked:top-0 before:peer-checked:w-full before:peer-checked:rotate-45 before:peer-checked:transform before:peer-checked:bg-white after:peer-checked:bottom-0 after:peer-checked:w-full after:peer-checked:-rotate-45 after:peer-checked:transform after:peer-checked:bg-white"
             ></div>
-            <div
-                class="fixed inset-0 z-40 hidden h-full w-full bg-black/50 backdrop-blur-sm peer-checked:block"
-            >
-                &nbsp;
-            </div>
             <div
                 class="fixed top-0 right-0 z-40 h-full w-full translate-x-full overflow-y-auto overscroll-y-none transition duration-500 peer-checked:translate-x-0"
             >
                 <div
-                    class="float-right text-right text-2xl sm:text-3xl min-h-full w-[65%] sm:w-[50%] bg-white px-8 pt-20 shadow-2xl"
+                    class="float-right text-right text-white text-4xl min-h-full w-[100%] bg-black/50 backdrop-blur-sm px-8 pt-20 shadow-2xl"
                 >
-                    <menu class="flex flex-col gap-4 mt-2">
+                    <menu class="flex flex-col gap-7 mt-2">
                         <li><router-link to="/">Jugar</router-link></li>
                         <li>
                             <router-link to="/" v-if="!logged"
                                 >Identificarse</router-link
                             >
-                            <router-link v-else to="/"> Perfil </router-link>
+                            <router-link v-else to="/">
+                                {{ username }}
+                            </router-link>
                         </li>
-                        <li v-if="logged">
-                            <router-link to="/">Historial</router-link>
-                        </li>
-                        <li><router-link to="/">Ranking</router-link></li>
+                        <li><router-link to="/">Clasificación</router-link></li>
                         <li v-if="logged">
                             <router-link to="/">Cerrar sesión</router-link>
                         </li>
@@ -58,25 +59,68 @@ const logged = authStore.isLogged;
         <!-- Menu navegación mobile end -->
 
         <!-- Menu navegación desktop start -->
-        <menu class="max-md:hidden flex gap-8 text-md">
-            <li><router-link to="/">Jugar</router-link></li>
-            <li>
+        <menu class="max-md:hidden flex gap-8 text-lg">
+            <li
+                class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
+            >
+                <router-link to="/">Jugar</router-link>
+            </li>
+            <li
+                class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
+            >
                 <router-link to="/">Ayuda</router-link>
             </li>
-            <li><router-link to="/">Ranking</router-link></li>
-            <li v-if="logged">
-                <router-link to="/">Historial</router-link>
+            <li
+                class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
+            >
+                <router-link to="/">Clasificación</router-link>
             </li>
-            <li v-if="logged">
-                <router-link to="/">Cerrar sesión</router-link>
-            </li>
-            <li>
+            <li
+                class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
+            >
                 <router-link to="/" v-if="!logged">Identificarse</router-link>
-                <router-link v-else to="/">Perfil</router-link>
+                <div class="relative" id="dropdownButton" v-else>
+                    <div
+                        class="cursor-pointer flex justify-between"
+                        @click="toggleDropdown()"
+                    >
+                        {{ username }}
+                    </div>
+                    <transition>
+                        <div
+                            id="dropdown"
+                            class="flex flex-col text-lg font-normal text-right rounded shadow-lg absolute bg-gray-200 cursor-pointer w-[150px] top-[52px] -right-4"
+                            v-show="showDropdown"
+                        >
+                            <router-link
+                                to="/"
+                                class="hover:bg-gray-300 hover:text-xl hover:font-semibold transform duration-300 ease-in-out py-3 px-4 rounded"
+                                >Perfil</router-link
+                            >
+                            <router-link
+                                to="/"
+                                class="hover:bg-gray-300 hover:text-xl hover:font-semibold transform duration-300 ease-in-out py-3 px-4 rounded"
+                                >Cerrar sesión</router-link
+                            >
+                        </div>
+                    </transition>
+                </div>
             </li>
         </menu>
         <!-- Menu navegación desktop end -->
     </div>
 </template>
 
-<style></style>
+<style>
+.v-move,
+.v-enter-active,
+.v-leave-active {
+    transition: 0.2s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+</style>
