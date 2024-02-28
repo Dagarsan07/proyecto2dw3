@@ -13,6 +13,6 @@ export default {
 
 <template>
     <Header></Header>
-    <router-view class="px-6 py-4 md:px-14"></router-view>
+    <router-view class="container mx-auto px-4 py-4"></router-view>
     <Footer></Footer>
 </template>
