@@ -16,7 +16,7 @@ function toggleDropdown() {
 
 <template>
     <div
-        class="bg-gray-400 flex justify-between px-4 md:px-8 py-6 items-center sticky top-0 z-30"
+        class="bg-gray-400 flex justify-between px-4 md:px-8 py-6 items-center sticky top-0 z-20"
     >
         <h1>Logo</h1>
 
@@ -33,7 +33,7 @@ function toggleDropdown() {
                 class="fixed top-0 right-0 z-40 h-full w-full translate-x-full overflow-y-auto overscroll-y-none transition duration-500 peer-checked:translate-x-0"
             >
                 <div
-                    class="float-right text-right text-white text-4xl min-h-full w-[100%] bg-black/50 backdrop-blur-sm px-8 pt-20 shadow-2xl"
+                    class="float-right text-right text-white text-4xl min-h-full w-[100%] bg-black/50 backdrop-blur-sm px-8 pt-20 z-30 shadow-2xl"
                 >
                     <menu class="flex flex-col gap-7 mt-2">
                         <li><router-link to="/">Jugar</router-link></li>
@@ -45,7 +45,11 @@ function toggleDropdown() {
                                 {{ username }}
                             </router-link>
                         </li>
-                        <li><router-link to="/">Clasificación</router-link></li>
+                        <li>
+                            <router-link to="/clasificacion"
+                                >Clasificación</router-link
+                            >
+                        </li>
                         <li v-if="logged">
                             <router-link to="/">Cerrar sesión</router-link>
                         </li>
@@ -73,7 +77,7 @@ function toggleDropdown() {
             <li
                 class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
             >
-                <router-link to="/">Clasificación</router-link>
+                <router-link to="/clasificacion">Clasificación</router-link>
             </li>
             <li
                 class="hover:text-xl hover:font-semibold transform duration-300 ease-in-out"
