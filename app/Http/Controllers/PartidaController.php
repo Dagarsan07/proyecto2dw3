@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Partida;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class PartidaController extends Controller
 {
     public function getClasificacionGlobal() {
-        $partidas = Partida::all();
+        $partidas = DB::table('partidas')
+            ->join('users', 'partidas.user_id', '=', 'users.id')
+            ->join('categorias', 'partidas.categoria_id', '=', 'categorias.id')
+            ->select('partidas.*', 'users.username', 'categorias.nombre')
+            ->orderByDesc('aciertos')
+            ->orderByDesc('puntuacion')
+            ->paginate(10);
+
         return response()->json($partidas);
     }
 }

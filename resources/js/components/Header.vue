@@ -7,6 +7,7 @@ const authStore = useAuthStore();
 const logged = authStore.isLogged;
 const username = authStore.username;
 
+const showMobileMenu = ref(false);
 const showDropdown = ref(false);
 
 function toggleDropdown() {
@@ -25,7 +26,12 @@ function toggleDropdown() {
             class="relative z-40 cursor-pointer px-2 py-3 md:hidden"
             for="mobile-menu"
         >
-            <input class="peer hidden" type="checkbox" id="mobile-menu" />
+            <input
+                class="peer hidden"
+                type="checkbox"
+                v-model="showMobileMenu"
+                id="mobile-menu"
+            />
             <div
                 class="relative z-50 block h-[2px] w-7 bg-black bg-transparent content-[''] before:absolute before:top-[-0.35rem] before:z-50 before:block before:h-full before:w-full before:bg-black before:transition-all before:duration-300 before:ease-out before:content-[''] after:absolute after:right-0 after:bottom-[-0.35rem] after:block after:h-full after:w-full after:bg-black after:transition-all after:duration-300 after:ease-out after:content-[''] peer-checked:bg-transparent before:peer-checked:top-0 before:peer-checked:w-full before:peer-checked:rotate-45 before:peer-checked:transform before:peer-checked:bg-white after:peer-checked:bottom-0 after:peer-checked:w-full after:peer-checked:-rotate-45 after:peer-checked:transform after:peer-checked:bg-white"
             ></div>
@@ -36,8 +42,10 @@ function toggleDropdown() {
                     class="float-right text-right text-white text-4xl min-h-full w-[100%] bg-black/50 backdrop-blur-sm px-8 pt-20 z-30 shadow-2xl"
                 >
                     <menu class="flex flex-col gap-7 mt-2">
-                        <li><router-link to="/">Jugar</router-link></li>
-                        <li>
+                        <li @click="showMobileMenu = !showMobileMenu">
+                            <router-link to="/">Jugar</router-link>
+                        </li>
+                        <li @click="showMobileMenu = !showMobileMenu">
                             <router-link to="/" v-if="!logged"
                                 >Identificarse</router-link
                             >
@@ -45,15 +53,18 @@ function toggleDropdown() {
                                 {{ username }}
                             </router-link>
                         </li>
-                        <li>
+                        <li @click="showMobileMenu = !showMobileMenu">
                             <router-link to="/clasificacion"
                                 >Clasificación</router-link
                             >
                         </li>
-                        <li v-if="logged">
+                        <li
+                            v-if="logged"
+                            @click="showMobileMenu = !showMobileMenu"
+                        >
                             <router-link to="/">Cerrar sesión</router-link>
                         </li>
-                        <li>
+                        <li @click="showMobileMenu = !showMobileMenu">
                             <router-link to="/">Ayuda</router-link>
                         </li>
                     </menu>
