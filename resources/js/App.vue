@@ -12,10 +12,10 @@ export default {
 </script>
 
 <template>
-    <Main class="flex flex-col h-screen justify-between">
+    <Main class="flex flex-col min-h-[100vh]">
         <Header></Header>
         <router-view
-            class="container grow mx-auto px-4 py-4 mb-auto md:max-w-[70%]"
+            class="mx-auto px-4 py-4 mb-auto md:min-w-[70%]"
         ></router-view>
         <Footer></Footer>
     </Main>

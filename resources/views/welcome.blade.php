@@ -13,6 +13,6 @@
         @vite(['./resources/js/app.js', './resources/css/app.css'])
     </head>
     <body>
-        <div id="app"></div>
+        <div id="app" style="min-height: 100vh; box-sizing: border-box"></div>
     </body>
 </html>
