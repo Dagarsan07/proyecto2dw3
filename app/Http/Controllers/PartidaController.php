@@ -20,4 +20,21 @@ class PartidaController extends Controller
 
         return response()->json($partidas);
     }
+
+    public function getClasificacionUser($username) {
+
+    }
+
+    public function getClasificacionByCategoria($categoria) {
+        $partidas = DB::table('partidas')
+            ->join('users', 'partidas.user_id', '=', 'users.id')
+            ->join('categorias', 'partidas.categoria_id', '=', 'categorias.id')
+            ->select('partidas.*', 'users.username', 'categorias.nombre')
+            ->where('categorias.nombre', '=', $categoria)
+            ->orderByDesc('aciertos')
+            ->orderByDesc('puntuacion')
+            ->paginate(10);
+
+        return response()->json($partidas);
+    }
 }

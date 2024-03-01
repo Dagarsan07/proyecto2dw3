@@ -9,25 +9,59 @@ const authStore = useAuthStore();
 const logged = authStore.isLogged;
 const username = authStore.username;
 
+const itemsCategoriaFilter = ref([]);
+const categoriaFilter = ref("");
+const clasificacionUser = ref(false);
+
 const itemsPaginaPartida = ref([]);
 const paginaActual = ref(1);
+const pagAnteriorUrl = ref(false);
+const siguientePagUrl = ref(true);
+const mostrarPaginacion = ref(true);
 
-const showDropdown = ref(false);
+const showPageSelect = ref(false);
+const showFilters = ref(false);
 
 onBeforeMount(() => {
-    getClasificacionGlobal(paginaActual);
+    getItemsFiltros();
+    getClasificacionGlobal();
 });
 
 function getClasificacionGlobal(pagina = 1) {
+    showPageSelect.value = showPageSelect.value == true ? false : true;
+
     axios
         .get(`api/clasificacion/global?page=${pagina}`)
         .then((response) => {
             console.log(response.data);
             itemsPaginaPartida.value = response;
             paginaActual.value = response.data.current_page;
+            if (response.data.links.length > 3) {
+                mostrarPaginacion.value = true;
+                pagAnteriorUrl.value =
+                    response.data.prev_page_url != null ? true : false;
+                siguientePagUrl.value =
+                    response.data.next_page_url != null ? true : false;
+            } else {
+                mostrarPaginacion.value = false;
+            }
         })
         .catch((error) => {
             console.error(error);
+        });
+}
+
+function getClasificacionByCategoria() {}
+
+function getItemsFiltros() {
+    axios
+        .get(`api/categorias`)
+        .then((response) => {
+            console.log(response.data);
+            itemsCategoriaFilter.value = response.data;
+        })
+        .catch((error) => {
+            console.log(error);
         });
 }
 </script>
@@ -37,32 +71,61 @@ function getClasificacionGlobal(pagina = 1) {
         <h1 class="text-3xl md:text-4xl py-4 text-center font-semibold">
             Clasificación
         </h1>
+
+        <button class="rounded border-none" @click="showFilters = !showFilters">
+            Filtros
+        </button>
+
+        <div v-if="showFilters" class="flex gap-6 items-center">
+            <select
+                name="categoriaFilter"
+                class="p-2 rounded border border-black"
+                id="categoriaFilter"
+            >
+                <option
+                    :value="categoria.nombre"
+                    v-for="(categoria, key) in itemsCategoriaFilter"
+                    :key="key"
+                >
+                    {{ categoria.nombre }}
+                </option>
+            </select>
+            <label for="partidasUser" v-if="logged">
+                Solo mis partidas:
+                <input
+                    type="checkbox"
+                    name="partidasUser"
+                    class="size-4 border rounded border-black"
+                    :checked="clasificacionUser"
+                />
+            </label>
+        </div>
+
         <table
-            class="mx-auto border-separate border-spacing-2 max-sm:text-xs w-full text-sm md:text-md lg:text-lg"
+            class="mx-auto border-separate text-center border-spacing-2 max-sm:text-xs w-full text-sm md:text-md lg:text-lg"
         >
-            <thead>
+            <thead class="font-medium">
                 <tr class="sm:hidden">
-                    <th>Pt.</th>
-                    <th>Jug.</th>
-                    <th>Ctg.</th>
-                    <th>Rtdo.</th>
-                    <th>Tmp.</th>
-                    <th>Pts.</th>
+                    <td>Pt.</td>
+                    <td>Jug.</td>
+                    <td>Ctg.</td>
+                    <td>Rtdo.</td>
+                    <td>Tmp.</td>
+                    <td>Pts.</td>
                 </tr>
                 <tr class="hidden sm:table-row">
-                    <th>Puesto</th>
-                    <th>Jugador</th>
-                    <th>Categoría</th>
-                    <th>Resultado</th>
-                    <th>Tiempo</th>
-                    <th>Puntuación</th>
+                    <td>Puesto</td>
+                    <td>Jugador</td>
+                    <td>Categoría</td>
+                    <td>Resultado</td>
+                    <td>Tiempo</td>
+                    <td>Puntuación</td>
                 </tr>
             </thead>
             <tbody>
                 <tr
                     v-for="(partida, index) in itemsPaginaPartida.data.data"
                     :key="index"
-                    class="text-center"
                 >
                     <td class="pt-4">
                         {{ itemsPaginaPartida.data.from + index }}
@@ -88,9 +151,9 @@ function getClasificacionGlobal(pagina = 1) {
                 v-if="slotProps.computed.total > slotProps.computed.perPage"
             >
                 <button
-                    v-if="paginaActual == 1 ? false : true"
+                    :disabled="!pagAnteriorUrl"
                     v-on="slotProps.prevButtonEvents"
-                    class="cursor-pointer px-3 py-2 h-fit focus:border rounded focus:border-black"
+                    class="cursor-pointer px-3 py-1 h-fit focus:border rounded focus:border-black"
                 >
                     <slot name="prev-nav">
                         <p class="text-lg md:text-xl">&ltrif;</p>
@@ -99,16 +162,16 @@ function getClasificacionGlobal(pagina = 1) {
 
                 <div class="relative" id="dropdownButton">
                     <button
-                        class="cursor-pointer px-3 py-2 h-fit focus:border rounded focus:border-black"
-                        @click="showDropdown = !showDropdown"
+                        class="cursor-pointer px-3 py-1 h-fit focus:border rounded focus:border-black"
+                        @click="showPageSelect = !showPageSelect"
                     >
                         {{ paginaActual }}
                     </button>
                     <transition>
                         <div
                             id="dropdown"
-                            class="flex flex-col font-normal text-right rounded shadow-lg block bg-white cursor-pointer gap-3"
-                            v-if="showDropdown"
+                            class="flex flex-col font-normal text-right rounded border border-gray-200 block bg-white cursor-pointer gap-3 py-1"
+                            v-if="showPageSelect"
                         >
                             <button
                                 v-for="(pagina, key) in slotProps.computed
@@ -123,9 +186,9 @@ function getClasificacionGlobal(pagina = 1) {
                 </div>
 
                 <button
-                    v-if="paginaActual == 5 ? false : true"
+                    :disabled="!siguientePagUrl"
                     v-on="slotProps.nextButtonEvents"
-                    class="px-3 py-2 cursor-pointer h-fit focus:border rounded focus:border-black"
+                    class="px-3 py-1 cursor-pointer h-fit focus:border rounded focus:border-black"
                 >
                     <slot name="next-nav">
                         <p class="text-lg md:text-xl">&rtrif;</p>
