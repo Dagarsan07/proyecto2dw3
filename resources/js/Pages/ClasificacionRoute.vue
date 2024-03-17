@@ -11,7 +11,8 @@ const username = authStore.username;
 
 const itemsCategoriaFilter = ref([]);
 const categoriaFilter = ref("");
-const clasificacionUser = ref(false);
+const itemsJugadorFilter = [{ nombre: "Solo mis partidas", value: "own" }];
+const jugadorFilter = ref("");
 
 const itemsPaginaPartida = ref([]);
 const paginaActual = ref(1);
@@ -28,7 +29,8 @@ onBeforeMount(() => {
 });
 
 function getClasificacionGlobal(pagina = 1) {
-    showPageSelect.value = showPageSelect.value == true ? false : true;
+    showFilters.value = false;
+    showPageSelect.value = false;
 
     axios
         .get(`api/clasificacion/global?page=${pagina}`)
@@ -72,33 +74,49 @@ function getItemsFiltros() {
             Clasificación
         </h1>
 
-        <button class="rounded border-none" @click="showFilters = !showFilters">
-            Filtros
+        <button
+            class="rounded border border-black p-2 mb-3"
+            @click="showFilters = !showFilters"
+        >
+            Filtros <span v-if="!showFilters">&blacktriangledown;</span>
+            <span v-else>&blacktriangle;</span>
         </button>
 
-        <div v-if="showFilters" class="flex gap-6 items-center">
-            <select
-                name="categoriaFilter"
-                class="p-2 rounded border border-black"
-                id="categoriaFilter"
-            >
-                <option
-                    :value="categoria.nombre"
-                    v-for="(categoria, key) in itemsCategoriaFilter"
-                    :key="key"
+        <div v-if="showFilters" class="grid grid-cols-2 gap-x-6">
+            <div class="col-span-1 flex flex-col">
+                <label for="categoriaFilter">Categoría</label>
+                <select
+                    name="categoriaFilter"
+                    id="categoriaFilter"
+                    class="p-1 rounded border border-black"
+                    v-model="categoriaFilter"
                 >
-                    {{ categoria.nombre }}
-                </option>
-            </select>
-            <label for="partidasUser" v-if="logged">
-                Solo mis partidas:
-                <input
-                    type="checkbox"
-                    name="partidasUser"
-                    class="size-4 border rounded border-black"
-                    :checked="clasificacionUser"
-                />
-            </label>
+                    <option
+                        v-for="(categoria, key) in itemsCategoriaFilter"
+                        :value="categoria.nombre"
+                        :key="key"
+                    >
+                        {{ categoria.nombre }}
+                    </option>
+                </select>
+            </div>
+            <div class="col-span-1 flex flex-col">
+                <label for="jugadorFilter">Jugador</label>
+                <select
+                    name="jugadorFilter"
+                    id="jugadorFilter"
+                    class="p-1 rounded border border-black"
+                    v-model="jugadorFilter"
+                >
+                    <option
+                        v-for="(jugador, key) in itemsJugadorFilter"
+                        :value="jugador.value"
+                        :key="key"
+                    >
+                        {{ jugador.nombre }}
+                    </option>
+                </select>
+            </div>
         </div>
 
         <table
@@ -170,7 +188,7 @@ function getItemsFiltros() {
                     <transition>
                         <div
                             id="dropdown"
-                            class="flex flex-col font-normal text-right rounded border border-gray-200 block bg-white cursor-pointer gap-3 py-1"
+                            class="flex flex-col font-normal text-right rounded border border-gray-200 bg-white cursor-pointer gap-3 py-1"
                             v-if="showPageSelect"
                         >
                             <button
