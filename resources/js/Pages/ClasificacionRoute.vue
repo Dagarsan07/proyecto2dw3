@@ -11,8 +11,7 @@ const username = authStore.username;
 
 const itemsCategoriaFilter = ref([]);
 const categoriaFilter = ref("");
-const itemsJugadorFilter = [{ nombre: "Solo mis partidas", value: "own" }];
-const jugadorFilter = ref("");
+const jugadorFilter = ref(false);
 
 const itemsPaginaPartida = ref([]);
 const paginaActual = ref(1);
@@ -24,14 +23,30 @@ const showPageSelect = ref(false);
 const showFilters = ref(false);
 
 onBeforeMount(() => {
+    console.log(categoriaFilter.value);
     getItemsFiltros();
     getClasificacionGlobal();
 });
 
-function getClasificacionGlobal(pagina = 1) {
+function getClasificacion(pagina = 1) {
     showFilters.value = false;
     showPageSelect.value = false;
+    if (jugadorFilter.value === true) {
+        if (categoriaFilter.value != "") {
+            getClasificacionByCategoria(pagina);
+        } else {
+            getClasificacionPersonal();
+        }
+    } else {
+        if (categoriaFilter.value != "") {
+            getClasificacionByCategoria(pagina);
+        } else {
+            getClasificacionGlobal(pagina);
+        }
+    }
+}
 
+function getClasificacionGlobal(pagina = 1) {
     axios
         .get(`api/clasificacion/global?page=${pagina}`)
         .then((response) => {
@@ -53,7 +68,34 @@ function getClasificacionGlobal(pagina = 1) {
         });
 }
 
-function getClasificacionByCategoria() {}
+function getClasificacionByCategoria(pagina) {
+    console.log(categoriaFilter.value.nombre);
+    axios
+        .get(
+            `api/clasificacion/global/${categoriaFilter.value.nombre}?page=${pagina}`
+        )
+        .then((response) => {
+            console.log(response.data);
+            itemsPaginaPartida.value = response;
+            paginaActual.value = response.data.current_page;
+            if (response.data.links.length > 3) {
+                mostrarPaginacion.value = true;
+                pagAnteriorUrl.value =
+                    response.data.prev_page_url != null ? true : false;
+                siguientePagUrl.value =
+                    response.data.next_page_url != null ? true : false;
+            } else {
+                mostrarPaginacion.value = false;
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}
+
+function getClasificacionPersonal() {
+    console.log("Tus Partidas");
+}
 
 function getItemsFiltros() {
     axios
@@ -74,48 +116,32 @@ function getItemsFiltros() {
             Clasificación
         </h1>
 
-        <button
-            class="rounded border border-black p-2 mb-3"
-            @click="showFilters = !showFilters"
-        >
-            Filtros <span v-if="!showFilters">&blacktriangledown;</span>
-            <span v-else>&blacktriangle;</span>
-        </button>
+        <ToggleButton
+            v-model="showFilters"
+            offLabel="Filtros &blacktriangledown;"
+            onLabel="Filtros &blacktriangle;"
+        />
 
-        <div v-if="showFilters" class="grid grid-cols-2 gap-x-6">
-            <div class="col-span-1 flex flex-col">
-                <label for="categoriaFilter">Categoría</label>
-                <select
-                    name="categoriaFilter"
-                    id="categoriaFilter"
-                    class="p-1 rounded border border-black"
-                    v-model="categoriaFilter"
-                >
-                    <option
-                        v-for="(categoria, key) in itemsCategoriaFilter"
-                        :value="categoria.nombre"
-                        :key="key"
-                    >
-                        {{ categoria.nombre }}
-                    </option>
-                </select>
-            </div>
-            <div class="col-span-1 flex flex-col">
-                <label for="jugadorFilter">Jugador</label>
-                <select
-                    name="jugadorFilter"
-                    id="jugadorFilter"
-                    class="p-1 rounded border border-black"
+        <div
+            v-if="showFilters"
+            class="grid grid-cols-1 gap-y-4 text-sm mt-3 mb-4"
+        >
+            <Dropdown
+                id="categoria-drop"
+                class="w-full"
+                v-model="categoriaFilter"
+                :options="itemsCategoriaFilter"
+                optionLabel="nombre"
+                placeholder="Categoría"
+                @change="getClasificacionByCategoria()"
+            />
+            <div class="flex items-center gap-2">
+                <Checkbox
+                    id="jugador-checkbox"
                     v-model="jugadorFilter"
-                >
-                    <option
-                        v-for="(jugador, key) in itemsJugadorFilter"
-                        :value="jugador.value"
-                        :key="key"
-                    >
-                        {{ jugador.nombre }}
-                    </option>
-                </select>
+                    :binary="true"
+                />
+                <label for="jugador-checkbox">Mostrar solo mis partidas</label>
             </div>
         </div>
 
@@ -160,7 +186,7 @@ function getItemsFiltros() {
         </table>
         <RenderlessPagination
             :data="itemsPaginaPartida.data"
-            @pagination-change-page="getClasificacionGlobal"
+            @pagination-change-page="getClasificacion"
             v-slot="slotProps"
         >
             <nav

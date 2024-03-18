@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class PartidaController extends Controller
 {
     public function getClasificacionGlobal() {
-        $partidas = DB::table('partidas')
+        $partidas = Partida::query()
             ->join('users', 'partidas.user_id', '=', 'users.id')
             ->join('categorias', 'partidas.categoria_id', '=', 'categorias.id')
             ->select('partidas.*', 'users.username', 'categorias.nombre')
@@ -26,7 +26,7 @@ class PartidaController extends Controller
     }
 
     public function getClasificacionByCategoria($categoria) {
-        $partidas = DB::table('partidas')
+        $partidas = Partida::query()
             ->join('users', 'partidas.user_id', '=', 'users.id')
             ->join('categorias', 'partidas.categoria_id', '=', 'categorias.id')
             ->select('partidas.*', 'users.username', 'categorias.nombre')
