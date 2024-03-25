@@ -145,46 +145,26 @@ function getItemsFiltros() {
             </div>
         </div>
 
-        <table
-            class="mx-auto border-separate text-center border-spacing-2 max-sm:text-xs w-full text-sm md:text-md lg:text-lg"
-        >
-            <thead class="font-medium">
-                <tr class="sm:hidden">
-                    <td>Pt.</td>
-                    <td>Jug.</td>
-                    <td>Ctg.</td>
-                    <td>Rtdo.</td>
-                    <td>Tmp.</td>
-                    <td>Pts.</td>
-                </tr>
-                <tr class="hidden sm:table-row">
-                    <td>Puesto</td>
-                    <td>Jugador</td>
-                    <td>Categoría</td>
-                    <td>Resultado</td>
-                    <td>Tiempo</td>
-                    <td>Puntuación</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr
-                    v-for="(partida, index) in itemsPaginaPartida.data.data"
-                    :key="index"
-                >
-                    <td class="pt-4">
-                        {{ itemsPaginaPartida.data.from + index }}
-                    </td>
-                    <td class="pt-4">{{ partida.username }}</td>
-                    <td class="pt-4">{{ partida.nombre }}</td>
-                    <td class="pt-4">
-                        {{ `${partida.aciertos}/${partida.cant_preguntas}` }}
-                    </td>
-                    <td class="pt-4">{{ partida.tiempo }}</td>
-                    <td class="pt-4">{{ partida.puntuacion }}</td>
-                </tr>
-            </tbody>
-        </table>
-        <RenderlessPagination
+        <DataTable :value="itemsPaginaPartida.data.data">
+            <Column header="Pt.">
+                <template #body="props">
+                    {{ props.index + 1 }}
+                </template>
+            </Column>
+            <Column header="Jug." field="username"></Column>
+            <Column header="Ctg." field="nombre"></Column>
+            <Column header="Rtdo.">
+                <template #body="resultado">
+                    {{ resultado.data.aciertos }}/{{
+                        resultado.data.cant_preguntas
+                    }}
+                </template>
+            </Column>
+            <Column header="Tmp." field="tiempo"></Column>
+            <Column header="Pts." field="puntuacion"></Column>
+        </DataTable>
+
+        <!-- <RenderlessPagination
             :data="itemsPaginaPartida.data"
             @pagination-change-page="getClasificacion"
             v-slot="slotProps"
@@ -239,7 +219,7 @@ function getItemsFiltros() {
                     </slot>
                 </button>
             </nav>
-        </RenderlessPagination>
+        </RenderlessPagination> -->
     </div>
 </template>
 
