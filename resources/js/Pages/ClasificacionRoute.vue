@@ -9,23 +9,30 @@ const authStore = useAuthStore();
 const logged = authStore.isLogged;
 const username = authStore.username;
 
+// FILTROS
 const itemsCategoriaFilter = ref([]);
 const categoriaFilter = ref("");
 const jugadorFilter = ref(false);
 
+// ITEMS TABLA
 const itemsPaginaPartida = ref([]);
-const paginaActual = ref(1);
-const pagAnteriorUrl = ref(false);
-const siguientePagUrl = ref(true);
-const mostrarPaginacion = ref(true);
 
+// PAGINACIÓN
+const paginaActual = ref(1);
+const primerReg = ref(0);
+const filasPag = ref(0);
+const totalPag = ref(0);
+
+// MOSTRAR/OCULTAR DESPLEGABLES
 const showPageSelect = ref(false);
 const showFilters = ref(false);
 
 onBeforeMount(() => {
-    console.log(categoriaFilter.value);
+    const defaultValues = {
+        page: 0,
+    };
     getItemsFiltros();
-    getClasificacionGlobal();
+    getClasificacionGlobal(defaultValues);
 });
 
 function getClasificacion(pagina = 1) {
@@ -46,47 +53,31 @@ function getClasificacion(pagina = 1) {
     }
 }
 
-function getClasificacionGlobal(pagina = 1) {
+function getClasificacionGlobal(event) {
     axios
-        .get(`api/clasificacion/global?page=${pagina}`)
+        .get(`api/clasificacion/global?page=${event.page + 1}`)
         .then((response) => {
-            console.log(response.data);
+            console.log(response);
             itemsPaginaPartida.value = response;
             paginaActual.value = response.data.current_page;
-            if (response.data.links.length > 3) {
-                mostrarPaginacion.value = true;
-                pagAnteriorUrl.value =
-                    response.data.prev_page_url != null ? true : false;
-                siguientePagUrl.value =
-                    response.data.next_page_url != null ? true : false;
-            } else {
-                mostrarPaginacion.value = false;
-            }
         })
         .catch((error) => {
             console.error(error);
         });
 }
 
-function getClasificacionByCategoria(pagina) {
-    console.log(categoriaFilter.value.nombre);
+function getClasificacionByCategoria(event = 0) {
+    console.log(event);
     axios
         .get(
-            `api/clasificacion/global/${categoriaFilter.value.nombre}?page=${pagina}`
+            `api/clasificacion/global/${categoriaFilter.value.nombre}?page=${
+                event.page + 1
+            }`
         )
         .then((response) => {
             console.log(response.data);
             itemsPaginaPartida.value = response;
             paginaActual.value = response.data.current_page;
-            if (response.data.links.length > 3) {
-                mostrarPaginacion.value = true;
-                pagAnteriorUrl.value =
-                    response.data.prev_page_url != null ? true : false;
-                siguientePagUrl.value =
-                    response.data.next_page_url != null ? true : false;
-            } else {
-                mostrarPaginacion.value = false;
-            }
         })
         .catch((error) => {
             console.error(error);
@@ -145,7 +136,15 @@ function getItemsFiltros() {
             </div>
         </div>
 
-        <DataTable :value="itemsPaginaPartida.data.data">
+        <DataTable
+            :value="itemsPaginaPartida.data.data"
+            :first="itemsPaginaPartida.data.from"
+            :paginator="true"
+            :rows="itemsPaginaPartida.data.per_page"
+            :lazy="true"
+            :totalRecords="itemsPaginaPartida.data.total"
+            @page="getClasificacion($event)"
+        >
             <Column header="Pt.">
                 <template #body="props">
                     {{ props.index + 1 }}
@@ -163,6 +162,13 @@ function getItemsFiltros() {
             <Column header="Tmp." field="tiempo"></Column>
             <Column header="Pts." field="puntuacion"></Column>
         </DataTable>
+
+        <!-- <Paginator
+            :row="itemsPaginaPartida.per_page"
+            :totalRecords="itemsPaginaPartida.total"
+            template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            currentPageReportTemplate="Página {currentPage} de {totalPages}"
+        /> -->
 
         <!-- <RenderlessPagination
             :data="itemsPaginaPartida.data"

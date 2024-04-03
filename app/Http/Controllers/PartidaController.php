@@ -19,7 +19,7 @@ class PartidaController extends Controller
         return response()->json($partidas);
     }
 
-    public function getClasificacionUser($username) {
+    public function getClasificacionUser($userId) {
 
     }
 
