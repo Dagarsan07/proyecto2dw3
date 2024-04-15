@@ -138,18 +138,15 @@ function getItemsFiltros() {
 
         <DataTable
             :value="itemsPaginaPartida.data.data"
-            :first="itemsPaginaPartida.data.from"
+            :first="itemsPaginaPartida.data.from - 1"
             :paginator="true"
             :rows="itemsPaginaPartida.data.per_page"
             :lazy="true"
             :totalRecords="itemsPaginaPartida.data.total"
+            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            currentPageReportTemplate="Puestos del {first} al {last} sobre {totalRecords}"
             @page="getClasificacion($event)"
         >
-            <Column header="Pt.">
-                <template #body="props">
-                    {{ props.index + 1 }}
-                </template>
-            </Column>
             <Column header="Jug." field="username"></Column>
             <Column header="Ctg." field="nombre"></Column>
             <Column header="Rtdo.">
@@ -162,70 +159,6 @@ function getItemsFiltros() {
             <Column header="Tmp." field="tiempo"></Column>
             <Column header="Pts." field="puntuacion"></Column>
         </DataTable>
-
-        <!-- <Paginator
-            :row="itemsPaginaPartida.per_page"
-            :totalRecords="itemsPaginaPartida.total"
-            template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-            currentPageReportTemplate="Página {currentPage} de {totalPages}"
-        /> -->
-
-        <!-- <RenderlessPagination
-            :data="itemsPaginaPartida.data"
-            @pagination-change-page="getClasificacion"
-            v-slot="slotProps"
-        >
-            <nav
-                v-bind="$attrs"
-                class="flex justify-center items-start lg:text-left"
-                v-if="slotProps.computed.total > slotProps.computed.perPage"
-            >
-                <button
-                    :disabled="!pagAnteriorUrl"
-                    v-on="slotProps.prevButtonEvents"
-                    class="cursor-pointer px-3 py-1 h-fit focus:border rounded focus:border-black"
-                >
-                    <slot name="prev-nav">
-                        <p class="text-lg md:text-xl">&ltrif;</p>
-                    </slot>
-                </button>
-
-                <div class="relative" id="dropdownButton">
-                    <button
-                        class="cursor-pointer px-3 py-1 h-fit focus:border rounded focus:border-black"
-                        @click="showPageSelect = !showPageSelect"
-                    >
-                        {{ paginaActual }}
-                    </button>
-                    <transition>
-                        <div
-                            id="dropdown"
-                            class="flex flex-col font-normal text-right rounded border border-gray-200 bg-white cursor-pointer gap-3 py-1"
-                            v-if="showPageSelect"
-                        >
-                            <button
-                                v-for="(pagina, key) in slotProps.computed
-                                    .pageRange"
-                                :key="key"
-                                v-on="slotProps.pageButtonEvents(pagina)"
-                            >
-                                {{ pagina }}
-                            </button>
-                        </div>
-                    </transition>
-                </div>
-
-                <button
-                    :disabled="!siguientePagUrl"
-                    v-on="slotProps.nextButtonEvents"
-                    class="px-3 py-1 cursor-pointer h-fit focus:border rounded focus:border-black"
-                >
-                    <slot name="next-nav">
-                        <p class="text-lg md:text-xl">&rtrif;</p>
-                    </slot>
-                </button>
-            </nav>
-        </RenderlessPagination> -->
     </div>
 </template>
 
