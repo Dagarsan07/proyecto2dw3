@@ -2,7 +2,7 @@
 
 <template>
     <footer
-        class="flex sm:flex-col justify-between items-center bg-gray-400 px-4 py-3 z-10 sticky top-[100vh]"
+        class="flex sm:flex-col justify-between items-center bg-[#3a7fb8] text-white px-4 py-3 z-10 sticky top-[100vh]"
     >
         <div class="flex row">
             <p>1</p>
