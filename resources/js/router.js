@@ -10,8 +10,8 @@ const routes = [
         component: () => import("./Pages/ClasificacionRoute.vue"),
     },
     {
-        path: "/test",
-        component: () => import("./Pages/TestRoute.vue"),
+        path: "/prepartida",
+        component: () => import("./Pages/PrepartidaRoute.vue"),
     },
 ];
 

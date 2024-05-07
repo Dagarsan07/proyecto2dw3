@@ -19,7 +19,7 @@
             <button
                 class="text-[#3a7fb8] text-lg md:text-2xl bg-[#d1e6f3] rounded hover:bg-[#acc7ff] hover:font-semibold transform duration-200 ease-in-out px-3 py-2 min-w-[50%] sm:min-w-[30%]"
             >
-                <router-link to="/test">Jugar como invitado</router-link>
+                <router-link to="/prepartida">Jugar como invitado</router-link>
             </button>
         </div>
     </div>
