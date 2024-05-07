@@ -15,7 +15,7 @@ export default {
     <Main class="flex flex-col min-h-[100vh]">
         <Header></Header>
         <router-view
-            class="mx-auto px-4 py-4 mb-auto md:min-w-[70%]"
+            class="mx-auto px-4 py-4 mb-auto md:max-w-[85%] lg:max-w-[60%]"
         ></router-view>
         <Footer></Footer>
     </Main>

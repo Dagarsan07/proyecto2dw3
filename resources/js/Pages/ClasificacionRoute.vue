@@ -2,7 +2,6 @@
 import { ref, onBeforeMount } from "vue";
 import { useAuthStore } from "../stores/auth";
 import axios from "axios";
-import { RenderlessPagination } from "laravel-vue-pagination";
 
 const authStore = useAuthStore();
 
