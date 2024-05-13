@@ -9,10 +9,6 @@ const routes = [
         path: "/clasificacion",
         component: () => import("./Pages/ClasificacionRoute.vue"),
     },
-    {
-        path: "/prepartida",
-        component: () => import("./Pages/PrepartidaRoute.vue"),
-    },
 ];
 
 export default createRouter({
