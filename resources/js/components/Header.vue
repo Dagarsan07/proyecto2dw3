@@ -17,9 +17,9 @@ function toggleDropdown() {
 
 <template>
     <div
-        class="bg-[#3a7fb8] text-white flex justify-between px-4 md:px-8 py-6 items-center sticky top-0 z-20"
+        class="bg-[#3a7fb8] text-white flex justify-between md:justify-center px-4 md:px-8 py-6 items-center sticky top-0 z-20"
     >
-        <h1>Logo</h1>
+        <h1 class="mr-8">Logo</h1>
 
         <!-- Menu navegación mobile start -->
         <label

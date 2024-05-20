@@ -9,6 +9,10 @@ const routes = [
         path: "/clasificacion",
         component: () => import("./Pages/ClasificacionRoute.vue"),
     },
+    {
+        path: "/partida",
+        component: () => import("./Pages/PartidaRoute.vue"),
+    },
 ];
 
 export default createRouter({
