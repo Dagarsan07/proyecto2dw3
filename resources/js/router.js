@@ -10,8 +10,16 @@ const routes = [
         component: () => import("./Pages/ClasificacionRoute.vue"),
     },
     {
+        path: "/prepartida",
+        component: () => import("./Pages/PrepartidaRoute.vue"),
+    },
+    {
         path: "/partida",
         component: () => import("./Pages/PartidaRoute.vue"),
+    },
+    {
+        path: "/perfil/:id",
+        component: () => import("./Pages/PerfilRoute.vue"),
     },
 ];
 

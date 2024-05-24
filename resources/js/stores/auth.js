@@ -3,7 +3,14 @@ import { ref } from "vue";
 
 export const useAuthStore = defineStore("auth", () => {
     const isLogged = ref(true);
-    const username = ref("David");
+    const usuario = ref({
+        name: "Nombre",
+        surname: "Prueba",
+        username: "nomprueba",
+        email: "prueba@correo.com",
+        password: "pass1234",
+        role: "ADMIN",
+    });
 
-    return { isLogged, username };
+    return { isLogged, usuario };
 });

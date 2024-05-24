@@ -5,7 +5,7 @@ import { useAuthStore } from "../stores/auth";
 const authStore = useAuthStore();
 
 const logged = authStore.isLogged;
-const username = authStore.username;
+const usuario = authStore.usuario;
 
 const showMobileMenu = ref(false);
 const showDropdown = ref(false);
@@ -43,13 +43,13 @@ function toggleDropdown() {
                 >
                     <menu class="flex flex-col gap-7 mt-2">
                         <li @click="showMobileMenu = !showMobileMenu">
-                            <router-link to="/">Jugar</router-link>
+                            <router-link to="/prepartida">Jugar</router-link>
                         </li>
                         <li @click="showMobileMenu = !showMobileMenu">
                             <router-link to="/" v-if="!logged"
                                 >Identificarse</router-link
                             >
-                            <router-link v-else to="/">
+                            <router-link v-else to="/perfil">
                                 {{ username }}
                             </router-link>
                         </li>
@@ -76,7 +76,7 @@ function toggleDropdown() {
         <!-- Menu navegación desktop start -->
         <menu class="max-md:hidden flex gap-8 text-lg">
             <li class="hover:font-semibold transform duration-300 ease-in-out">
-                <router-link to="/">Jugar</router-link>
+                <router-link to="/prepartida">Jugar</router-link>
             </li>
             <li class="hover:font-semibold transform duration-300 ease-in-out">
                 <router-link to="/">Ayuda</router-link>
@@ -91,7 +91,7 @@ function toggleDropdown() {
                         class="cursor-pointer flex justify-between"
                         @click="toggleDropdown()"
                     >
-                        {{ username }}
+                        {{ usuario.username }}
                     </div>
                     <transition>
                         <div
@@ -100,7 +100,7 @@ function toggleDropdown() {
                             v-show="showDropdown"
                         >
                             <router-link
-                                to="/"
+                                to="/perfil"
                                 class="hover:bg-[#d1e6f3] hover:font-semibold transform duration-300 ease-in-out py-3 px-4 rounded"
                                 >Perfil</router-link
                             >

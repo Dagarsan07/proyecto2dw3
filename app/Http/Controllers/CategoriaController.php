@@ -9,7 +9,6 @@ class CategoriaController extends Controller
 {
     public function getAllCategorias() {
         $categorias = DB::table('categorias')
-            ->select('categorias.nombre')
             ->get();
 
         return response()->json($categorias);

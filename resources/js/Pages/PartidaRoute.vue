@@ -1,3 +1,8 @@
-<script setup></script>
+<script setup>
+import { onBeforeMount } from 'vue';
+onBeforeMount(() => {
+
+}),
+</script>
 
 <template></template>
