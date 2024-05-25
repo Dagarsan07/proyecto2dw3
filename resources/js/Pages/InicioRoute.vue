@@ -16,18 +16,16 @@ const authStore = useAuthStore();
             <button
                 class="text-white text-lg md:text-xl bg-[#1984c2] rounded hover:bg-[#1574ad] hover:font-semibold transform duration-200 ease-in-out px-3 py-2 min-w-[40%] sm:min-w-[30%]"
             >
-                <router-link to="/partida" v-if="authStore.isLogged"
+                <router-link to="/prepartida" v-if="authStore.isLogged"
                     >Jugar</router-link
                 >
-                <router-link to="/partida" v-else
-                    >Jugar como invitado</router-link
-                >
+                <router-link to="/login" v-else>Iniciar sesión</router-link>
             </button>
             <router-link
                 v-if="!authStore.isLogged"
-                class="text-sm hover:text-[#1984c2] hover:underline transform duration-200 ease-in-out"
-                to="/clasificacion"
-                >¿Tienes cuenta? Inicia sesión</router-link
+                class="text-md hover:text-[#1984c2] hover:underline transform duration-200 ease-in-out"
+                to="/prepartida"
+                >Jugar como invitado</router-link
             >
         </div>
     </div>

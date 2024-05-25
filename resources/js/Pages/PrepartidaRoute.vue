@@ -1,4 +1,5 @@
 <script setup>
+import Card from "primevue/card";
 import { useCategoriaStore } from "../stores/categoria";
 import { useAuthStore } from "../stores/auth";
 import { usePartidaStore } from "../stores/partida";
@@ -19,11 +20,17 @@ async function getAllCategoria() {
 </script>
 
 <template>
-    <Dropdown
-        v-model="categoriaSelected"
-        :options="categorias"
-        optionLabel="nombre"
-        placeholder="Selecciona una categoría"
-        class="w-44 sm:min-w-[40%] text-left"
-    />
+    <div class="container text-center">
+        <h2 class="text-2xl mt-8">Selecciona una categoría</h2>
+        <Card
+            v-for="categoria in categorias"
+            class="pt-1 mt-4 mx-auto bg-[#1984c2]"
+        >
+            <template #content
+                ><span class="text-2xl text-white">{{
+                    categoria.nombre
+                }}</span></template
+            >
+        </Card>
+    </div>
 </template>

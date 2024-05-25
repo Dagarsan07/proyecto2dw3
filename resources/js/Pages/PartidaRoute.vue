@@ -1,8 +1,3 @@
-<script setup>
-import { onBeforeMount } from 'vue';
-onBeforeMount(() => {
-
-}),
-</script>
+<script setup></script>
 
 <template></template>
