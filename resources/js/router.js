@@ -14,7 +14,8 @@ const routes = [
         component: () => import("./Pages/PrepartidaRoute.vue"),
     },
     {
-        path: "/partida/:categoriaId",
+        path: "/partida/:idCategoria",
+        name: 'partida',
         component: () => import("./Pages/PartidaRoute.vue"),
     },
     {

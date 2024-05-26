@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\PartidaController;
+use App\Http\Controllers\PreguntaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,4 @@ Route::get('/clasificacion/{username}', [PartidaController::class, 'getClasifica
 
 Route::get('/categorias', [CategoriaController::class, 'getAllCategorias'])->name('allCategorias');
 
+Route::get('/preguntas/{categoria}', [PreguntaController::class, 'getRandPreguntas'])->name('randPreguntas');
