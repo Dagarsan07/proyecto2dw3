@@ -29,4 +29,4 @@ Route::get('/clasificacion/{username}', [PartidaController::class, 'getClasifica
 
 Route::get('/categorias', [CategoriaController::class, 'getAllCategorias'])->name('allCategorias');
 
-Route::get('/preguntas/{categoria}', [PreguntaController::class, 'getRandPreguntas'])->name('randPreguntas');
+Route::get('/preguntas/{categoria}', [PreguntaController::class, 'getRandPreguntas']);

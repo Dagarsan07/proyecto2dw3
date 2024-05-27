@@ -8,9 +8,9 @@ const authStore = useAuthStore();
     <div class="text-center mt-52">
         <h1 class="text-7xl md:text-8xl">Trivia</h1>
         <p class="mx-auto text-sm md:text-xl mt-1 font-normal">
-            Bienvenido a Trivia Challenge. Selecciona una categoria en la cual
-            poner a prueba tu conocimiento, respondiendo a diferentes preguntas
-            y compitiendo con otros jugadores.
+            Bienvenido a Txurditest. Selecciona una categoria en la cual poner a
+            prueba tu conocimiento, respondiendo a diferentes preguntas y
+            compitiendo con otros jugadores.
         </p>
         <div class="mx-auto flex flex-col items-center gap-y-3 sm:gap-x-5 mt-5">
             <button

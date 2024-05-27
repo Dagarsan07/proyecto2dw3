@@ -1,11 +1,9 @@
-<template>
-
-</template>
+<template></template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import axios from 'axios';
+import { ref, computed, onBeforeMount } from "vue";
+import { useRoute } from "vue-router";
+import axios from "axios";
 
 const preguntas = ref([]);
 const indicePregunta = ref(0);
@@ -13,14 +11,14 @@ const puntuacion = ref(0);
 
 const route = useRoute();
 
-onMounted(() => {
+onBeforeMount(() => {
     const idCategoria = route.params.idCategoria;
     getPreguntas(idCategoria);
-})
+});
 
 const preguntaActual = computed(() => {
     return preguntas.value[indicePregunta.value];
-})
+});
 
 async function getPreguntas(idCategoria) {
     try {
@@ -29,7 +27,7 @@ async function getPreguntas(idCategoria) {
         console.log(response);
         preguntas.value = response.data;
     } catch (error) {
-        console.error('Error al obtener las preguntas: ', error);
+        console.error("Error al obtener las preguntas: ", error);
     }
 }
 
@@ -45,4 +43,3 @@ function restart() {
     const idCategoria = route.params.idCategoria;
 }
 </script>
-
